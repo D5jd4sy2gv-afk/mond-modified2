@@ -21,7 +21,7 @@ jobs:
           set -e
           mkdir -p /tmp/mond-src
           unzip -q mond-main-iphone11-14-build-ready.zip -d /tmp/mond-src
-          cp -R /tmp/mond-src/mond-main/. .
+          rsync -a --exclude='.github/' /tmp/mond-src/mond-main/ ./
           rm mond-main-iphone11-14-build-ready.zip
 
       - name: Commit project
