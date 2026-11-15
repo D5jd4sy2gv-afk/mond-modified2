@@ -1,7 +1,0 @@
-.DS_Store
-build/
-xcuserdata/
-xcshareddata/
-*.ipa
-*.xcuserstate
-.ldid.*
