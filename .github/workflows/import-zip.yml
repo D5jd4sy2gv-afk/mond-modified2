@@ -4,7 +4,7 @@ name: Import Mond ZIP
 on:
   push:
     paths:
-      - 'mond-main-iphone11-14-build-ready.zip'
+      - 'mond-modified2-main-v2-chinese-round2.zip'
   workflow_dispatch:
 
 permissions:
@@ -19,15 +19,25 @@ jobs:
       - name: Extract project
         run: |
           set -e
+          ZIP_FILE="mond-modified2-main-v2-chinese-round2.zip"
+          test -f "$ZIP_FILE"
+
           mkdir -p /tmp/mond-src
-          unzip -q mond-main-iphone11-14-build-ready.zip -d /tmp/mond-src
-          rsync -a --exclude='.github/' /tmp/mond-src/mond-main/ ./
-          rm mond-main-iphone11-14-build-ready.zip
+          unzip -q "$ZIP_FILE" -d /tmp/mond-src
+
+          SRC_DIR="/tmp/mond-src/mond-modified2-main"
+          test -d "$SRC_DIR"
+          test -f "$SRC_DIR/mond.xcodeproj/project.pbxproj"
+
+          rsync -a --exclude='.github/' "$SRC_DIR"/ ./
+          rm "$ZIP_FILE"
 
       - name: Commit project
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Import modified Mond source"
-          git push
+          if ! git diff --cached --quiet; then
+            git commit -m "Import updated Mond V2 source"
+            git push
+          fi
